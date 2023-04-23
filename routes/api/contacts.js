@@ -3,8 +3,8 @@ const express = require("express");
 const {
   putContactValidation,
   postContactValidation,
-  patchContactValidation,
-} = require("../../middlewares/validationMiddleware");
+  patchValidation,
+} = require("../../middlewares/contactValidationMiddleware");
 const {
   getController,
   getByIdController,
@@ -12,25 +12,39 @@ const {
   postController,
   putController,
   patchController,
-} = require("../../controllers/getControllers");
+} = require("../../controllers/contacts");
 const { isValidId } = require("../../middlewares/isValidId");
+const { authentificate } = require("../../middlewares/authentificate");
 
 const router = express.Router();
 
-router.get("/", getController);
+router.get("/", authentificate, getController);
 
-router.get("/:contactId", isValidId, getByIdController);
+router.get("/:contactId", authentificate, isValidId, getByIdController);
 
-router.post("/", postContactValidation, postController);
+router.post("/", authentificate, postContactValidation, postController);
 
-router.delete("/:contactId", isValidId, deleteController, deleteController);
+router.delete(
+  "/:contactId",
+  authentificate,
+  isValidId,
+  deleteController,
+  deleteController
+);
 
-router.put("/:contactId", isValidId, putContactValidation, putController);
+router.put(
+  "/:contactId",
+  authentificate,
+  isValidId,
+  putContactValidation,
+  putController
+);
 
 router.patch(
   "/:contactId/favorite",
+  authentificate,
   isValidId,
-  patchContactValidation,
+  patchValidation,
   patchController
 );
 
